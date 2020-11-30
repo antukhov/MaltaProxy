@@ -1,5 +1,6 @@
 package com.malta.proxy.queue;
 
+import com.malta.proxy.Main;
 import com.malta.proxy.request.InboundHTTPRequestDeserializer;
 import com.malta.proxy.request.InboundHTTPRequestEntity;
 
@@ -8,6 +9,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.malta.proxy.Main.ARGUMENTS;
 
 /**
  * The Cache queue single-thread processor.
@@ -51,7 +54,9 @@ public class CacheQueueSingleThreadWorker implements CacheQueueProcessor {
             InboundHTTPRequestEntity inboundHTTPRequestEntity =
                 InboundHTTPRequestDeserializer.deserialize(cacheQueueEntity.request,
                     cacheQueueEntity.createdAt, cacheQueueEntity.threadName, cacheQueueEntity.inetAddress);
-            LOGGER.log(Level.INFO, "Processing: {0}", inboundHTTPRequestEntity);
+            if(Boolean.parseBoolean(ARGUMENTS.get(Main.ARGUMENT.ECHO_MODE))) {
+                LOGGER.log(Level.INFO, "Processing: {0}", inboundHTTPRequestEntity);
+            }
         }
     }
 }

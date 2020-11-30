@@ -18,6 +18,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.malta.proxy.Main.ARGUMENTS;
+
 /**
  * HTTP server dispatcher
  */
@@ -33,8 +35,8 @@ public class HTTPServer {
 
     static {
         LOGGER = Logger.getLogger(Main.class.getName());
-        SERVER_THREAD_COUNT = 4;
-        SERVER_PORT = 8081;
+        SERVER_THREAD_COUNT = Integer.parseInt(ARGUMENTS.get(Main.ARGUMENT.THREADS));
+        SERVER_PORT = Integer.parseInt(ARGUMENTS.get(Main.ARGUMENT.SERVER_PORT));
         INET_SOCKET_ADDRESS = new InetSocketAddress("localhost", SERVER_PORT);
     }
 
