@@ -1,4 +1,4 @@
-package com.malta.proxy;
+package com.malta.proxy.queue;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -15,7 +15,7 @@ public class CacheQueue {
     // size() is too expensive method as it iterates through all collection
     private final AtomicInteger counter;
     // we have multiple publishers so non-blocking CAS is a pros
-    private final ConcurrentLinkedQueue<InboundHTTPRequestEntity> cacheCommonQueue;
+    private final ConcurrentLinkedQueue<CacheQueueEntity> cacheCommonQueue;
     private CacheQueueProcessor cacheQueueProcessor;
 
     static {
@@ -40,23 +40,25 @@ public class CacheQueue {
     /**
      * Add request entity to the queue. Increments queue requests counter and trigger injected queue processor
      *
-     * @param inboundHTTPRequestEntity - the inbound HTTP request entity
+     * @param cacheQueueEntity - the tiny HTTP request entity
      */
-    public void add(InboundHTTPRequestEntity inboundHTTPRequestEntity) {
-        if(cacheCommonQueue.add(inboundHTTPRequestEntity)) {
+    public boolean add(CacheQueueEntity cacheQueueEntity) {
+        if(cacheCommonQueue.add(cacheQueueEntity)) {
             counter.incrementAndGet();
             cacheQueueProcessor.process();
+            LOGGER.log(Level.INFO, "Requests count: {0}",  counter.get());
+            return true;
         }
-        LOGGER.log(Level.INFO, "Requests count: {0}",  counter.get());
+        return false;
     }
 
-    public InboundHTTPRequestEntity poll() {
-        InboundHTTPRequestEntity inboundHTTPRequestEntity = cacheCommonQueue.poll();
-        if(inboundHTTPRequestEntity != null) {
+    public CacheQueueEntity poll() {
+        CacheQueueEntity cacheQueueEntity = cacheCommonQueue.poll();
+        if(cacheQueueEntity != null) {
             counter.decrementAndGet();
         }
         LOGGER.log(Level.INFO, "Requests count: {0}", counter.get());
-        return inboundHTTPRequestEntity;
+        return cacheQueueEntity;
     }
 
     public AtomicInteger getCounter() {

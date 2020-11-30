@@ -1,5 +1,9 @@
 package com.malta.proxy;
 
+import com.malta.proxy.request.InboundHTTPRequestHandler;
+import com.malta.proxy.queue.CacheQueue;
+import com.malta.proxy.queue.CacheQueueSingleThreadWorker;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -78,7 +82,7 @@ public class HTTPServer {
                         handlerPool.get(Thread.currentThread().getName()).setSocket(clientSocket).run(), workerExecutorService);
                 }
             } catch (IOException e) {
-                LOGGER.log(Level.WARNING, e.getMessage());
+                LOGGER.log(Level.WARNING, "Running task in thread from poller: {0}", e.getMessage());
             }
         }, generalExecutorService);
 

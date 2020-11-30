@@ -1,4 +1,4 @@
-package com.malta.proxy;
+package com.malta.proxy.queue;
 
 /**
  * The interface Cache queue processor.

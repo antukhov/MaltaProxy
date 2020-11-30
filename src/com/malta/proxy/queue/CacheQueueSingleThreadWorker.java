@@ -1,4 +1,7 @@
-package com.malta.proxy;
+package com.malta.proxy.queue;
+
+import com.malta.proxy.request.InboundHTTPRequestDeserializer;
+import com.malta.proxy.request.InboundHTTPRequestEntity;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,15 +41,17 @@ public class CacheQueueSingleThreadWorker implements CacheQueueProcessor {
     @Override
     public void process() {
         if (!inProgress.get() && cacheQueue.getCounter().get() > 0) {
-            executorService.submit(this::run);
+            inProgress.set(executorService.submit(this::run).isDone());
         }
     }
 
     private void run() {
-        inProgress.set(true);
         while (cacheQueue.getCounter().get() > 0) {
-            LOGGER.log(Level.INFO, "Processing {0} ", cacheQueue.poll());
+            CacheQueueEntity cacheQueueEntity = cacheQueue.poll();
+            InboundHTTPRequestEntity inboundHTTPRequestEntity =
+                InboundHTTPRequestDeserializer.deserialize(cacheQueueEntity.request,
+                    cacheQueueEntity.createdAt, cacheQueueEntity.threadName, cacheQueueEntity.inetAddress);
+            LOGGER.log(Level.INFO, "Processing: {0}", inboundHTTPRequestEntity);
         }
-        inProgress.set(false);
     }
 }
