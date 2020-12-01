@@ -80,6 +80,7 @@ public class HTTPServer {
                 serverSocket.bind(INET_SOCKET_ADDRESS);
                 while (!isStopped) {
                     Socket clientSocket = serverSocket.accept();
+                    clientSocket.setTcpNoDelay(true);
                     CompletableFuture.runAsync(() ->
                         handlerPool.get(Thread.currentThread().getName()).setSocket(clientSocket).run(), workerExecutorService);
                 }

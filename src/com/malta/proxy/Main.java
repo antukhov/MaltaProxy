@@ -7,6 +7,7 @@ public class Main {
 
     public static final Map<ARGUMENT, String> ARGUMENTS = new EnumMap<>(ARGUMENT.class);
 
+    // enum-definition of possible arg list
     public enum ARGUMENT {
         SERVER_PORT("8081"),            // which port app will listen to
         THREADS("4"),                   // how many threads will have the handlers pool
