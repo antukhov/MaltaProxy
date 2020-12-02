@@ -1,10 +1,12 @@
 # Malta Proxy
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 ### :bulb: &nbsp; Idea
 
 Simple caching proxy server based on Java with zero dependencies
 
-### :ballot_box_with_check: Features
+### :hammer_and_wrench: Features
 
 - Support the HTTP 1.1
 - Based on Java Sockets
