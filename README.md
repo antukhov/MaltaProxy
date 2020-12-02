@@ -6,7 +6,7 @@
 
 Simple caching proxy server based on Java with zero dependencies
 
-### :hammer_and_wrench: Features
+### :hammer_and_wrench: &nbsp; Features
 
 - Support the HTTP 1.1
 - Based on Java Sockets
